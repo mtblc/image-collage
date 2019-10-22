@@ -44,7 +44,7 @@ createCollage(photos, collageWidth).then((imageBuffer) => {
 
 ## Acknowledge
 
-Heavily inspired in the following proyects:
+Heavily inspired in the following projects:
 
 - [classdogo](https://github.com/classdojo) for [photo-collage](https://github.com/classdojo/photo-collage)
     - Their API inspired this project API and used a modified version of their `getPhoto` function.
