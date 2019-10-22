@@ -1,15 +1,16 @@
 {
   "name": "image-collage",
   "version": "0.0.3",
+  "description": "Turns an array of images into a photo collage", 
   "main": "index.js",
   "author": "Nicolás Gómez Espejo",
-  "homepage": "https://github.com/muzk/image-collage",
+  "homepage": "https://github.com/mtblc/image-collage",
   "repository": {
     "type": "git",
-    "url": "https://github.com/muzk/image-collage.git"
+    "url": "https://github.com/mtblc/image-collage.git"
   },
   "bugs": {
-    "url": "https://github.com/muzk/image-collage/issues"
+    "url": "https://github.com/mtblc/image-collage/issues"
   },
   "license": "MIT",
   "scripts": {
@@ -28,5 +29,8 @@
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "mocha": "^6.2.2"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }
