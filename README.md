@@ -11,12 +11,16 @@ Turns an array of images into a photo collage
 
 ## Installation
 
-    npm install --save image-collage
+    npm install --save @mtblc/image-collage
     
+or
+
+    yarn add @mtblc/image-collage
+
 ## Usage
 
 ```javascript
-const { createCollage } = require('image-collage');
+const { createCollage } = require('@mtblc/image-collage');
 const fs = require('fs');
 
 // You can pass an array containing string URLs, file paths or an image Buffer

@@ -1,6 +1,6 @@
 {
   "name": "@mtblc/image-collage",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Turns an array of images into a photo collage", 
   "main": "index.js",
   "author": "Nicolás Gómez Espejo",
