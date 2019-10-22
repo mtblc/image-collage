@@ -2,8 +2,37 @@ import Promise from 'bluebird';
 import sizeOf from 'image-size';
 import Canvas from 'canvas';
 import { computeRowLayout } from './layouts/justified';
+import { computeColumnLayout } from './layouts/columns';
 import { findIdealNodeSearch } from './utils/findIdealNodeSearch';
 import { getPhoto } from './utils/photo';
+
+function getColumnLayout(photos, containerWidth, totalColumns = 4) {
+  const thumbs = computeColumnLayout({
+    containerWidth,
+    margin: 0,
+    photos,
+    columns: totalColumns,
+  });
+
+  const columns = [];
+  let currentColumn = [];
+  let width = 0;
+
+  thumbs.forEach((thumb) => {
+    if (Math.round(width + thumb.width) > containerWidth) {
+      columns.push(currentColumn);
+      currentColumn = [];
+      width = thumb.width;
+    } else {
+      width += thumb.width;
+    }
+    currentColumn.push(thumb);
+  });
+
+  if (currentColumn.length > 0) columns.push(currentColumn);
+
+  return columns;
+}
 
 function getRowLayout(photos, containerWidth, targetRowHeight = 300) {
   let limitNodeSearch = 2;
@@ -64,23 +93,29 @@ function getPositions(rows) {
 }
 
 // eslint-disable-next-line import/prefer-default-export
-export async function createCollage(sources, maxWidth) {
+export async function createCollage(sources, maxWidth, { layout = 'row', columns = 2 } = {}) {
   const photos = await Promise.all(sources.map(getPhoto));
   const sizes = await Promise.all(photos.map(sizeOf));
   const photosWithSizes = photos.map((photo, index) => ({
     photo,
     ...sizes[index],
   }));
-  const rows = getRowLayout(photosWithSizes, maxWidth);
-  const canvasHeight = getCanvasHeight(rows);
-  const canvasWidth = getCanvasWidth(rows);
-  const positions = getPositions(rows);
+
+  let items = [];
+  if (layout === 'row') {
+    items = getRowLayout(photosWithSizes, maxWidth);
+  } else if (layout === 'column') {
+    items = getColumnLayout(photosWithSizes, maxWidth, columns);
+  }
+  const canvasHeight = getCanvasHeight(items);
+  const canvasWidth = getCanvasWidth(items);
+  const positions = getPositions(items);
 
   const canvasCollage = Canvas.createCanvas(canvasWidth, canvasHeight, 'png');
   const ctx = canvasCollage.getContext('2d');
 
-  rows.forEach((row, i) => {
-    row.forEach(({ height, width, photo }, j) => {
+  items.forEach((item, i) => {
+    item.forEach(({ height, width, photo }, j) => {
       const img = new Canvas.Image();
       const { x, y } = positions[i][j];
       img.src = photo;
