@@ -1,8 +1,7 @@
 # image-collage
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.org/muZk/image-collage.svg?branch=master)](https://travis-ci.org/muZk/image-collage)
-[![dependencies Status](https://david-dm.org/muZk/image-collage/status.svg)](https://david-dm.org/muZk/image-collage)
+[![dependencies Status](https://david-dm.org/mtblc/image-collage/status.svg)](https://david-dm.org/mtblc/image-collage)
 
 Turns an array of images into a photo collage
 
