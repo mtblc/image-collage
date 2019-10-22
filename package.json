@@ -1,8 +1,16 @@
 {
   "name": "image-collage",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "author": "Nicolás Gómez Espejo",
+  "homepage": "https://github.com/neptunian/react-photo-gallery",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/muzk/image-collage.git"
+  },
+  "bugs": {
+    "url": "https://github.com/muzk/image-collage/issues"
+  },
   "license": "MIT",
   "scripts": {
     "test": "mocha --timeout 5000",
