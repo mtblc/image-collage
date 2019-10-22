@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "main": "index.js",
   "author": "Nicolás Gómez Espejo",
-  "homepage": "https://github.com/neptunian/react-photo-gallery",
+  "homepage": "https://github.com/muzk/image-collage",
   "repository": {
     "type": "git",
     "url": "https://github.com/muzk/image-collage.git"
