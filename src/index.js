@@ -16,7 +16,7 @@ function getRowLayout(photos, containerWidth, targetRowHeight = 300) {
     containerWidth,
     limitNodeSearch,
     targetRowHeight,
-    margin: 0,
+    margin: 2,
     photos,
   });
 
@@ -55,10 +55,10 @@ function getPositions(rows) {
     let x = 0;
     const position = row.map((thumb) => {
       const thumbX = x;
-      x += thumb.width;
+      x += (thumb.width + thumb.margin);
       return { x: thumbX, y };
     });
-    y += row[0].height;
+    y += (row[0].height + row[0].margin);
     return position;
   });
 }
