@@ -1,6 +1,5 @@
 const assert = require('assert');
 const sizeOf = require('image-size');
-// const fs = require('fs');
 const photos = require('./data/photos');
 const { createCollage } = require('../index');
 
@@ -26,7 +25,7 @@ describe('createCollage', () => {
   describe('column layout', () => {
     let collage;
 
-    before(() => createCollage(photos, 1000, { layout: 'column', columns: 3 }).then((result) => {
+    before(() => createCollage(photos, 1000, { layout: 'column', columns: 2 }).then((result) => {
       collage = result;
     }));
 
@@ -36,10 +35,8 @@ describe('createCollage', () => {
 
     it('returns an image with correct size', () => {
       const size = sizeOf(collage);
-      // fs.writeFileSync('./test.png', collage);
-      // console.log(size);
       assert(size.width === 1000);
-      assert(size.height === 986);
+      assert(size.height === 3674);
     });
   });
 });

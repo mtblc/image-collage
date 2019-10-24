@@ -14,24 +14,7 @@ function getColumnLayout(photos, containerWidth, totalColumns = 4) {
     columns: totalColumns,
   });
 
-  const columns = [];
-  let currentColumn = [];
-  let width = 0;
-
-  thumbs.forEach((thumb) => {
-    if (Math.round(width + thumb.width) > containerWidth) {
-      columns.push(currentColumn);
-      currentColumn = [];
-      width = thumb.width;
-    } else {
-      width += thumb.width;
-    }
-    currentColumn.push(thumb);
-  });
-
-  if (currentColumn.length > 0) columns.push(currentColumn);
-
-  return columns;
+  return thumbs;
 }
 
 function getRowLayout(photos, containerWidth, targetRowHeight = 300) {
@@ -69,15 +52,15 @@ function getRowLayout(photos, containerWidth, targetRowHeight = 300) {
   return rows;
 }
 
-function getCanvasWidth(rows) {
+function getRowCanvasWidth(rows) {
   return rows[0].reduce((width, element) => width + element.width, 0);
 }
 
-function getCanvasHeight(rows) {
+function getRowCanvasHeight(rows) {
   return rows.reduce((height, row) => height + row[0].height, 0);
 }
 
-function getPositions(rows) {
+function getRowPositions(rows) {
   let y = 0;
 
   return rows.map((row) => {
@@ -92,24 +75,11 @@ function getPositions(rows) {
   });
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export async function createCollage(sources, maxWidth, { layout = 'row', columns = 2 } = {}) {
-  const photos = await Promise.all(sources.map(getPhoto));
-  const sizes = await Promise.all(photos.map(sizeOf));
-  const photosWithSizes = photos.map((photo, index) => ({
-    photo,
-    ...sizes[index],
-  }));
-
-  let items = [];
-  if (layout === 'row') {
-    items = getRowLayout(photosWithSizes, maxWidth);
-  } else if (layout === 'column') {
-    items = getColumnLayout(photosWithSizes, maxWidth, columns);
-  }
-  const canvasHeight = getCanvasHeight(items);
-  const canvasWidth = getCanvasWidth(items);
-  const positions = getPositions(items);
+function createRowCollage({ photos, maxWidth }) {
+  const items = getRowLayout(photos, maxWidth);
+  const canvasHeight = getRowCanvasHeight(items);
+  const canvasWidth = getRowCanvasWidth(items);
+  const positions = getRowPositions(items);
 
   const canvasCollage = Canvas.createCanvas(canvasWidth, canvasHeight, 'png');
   const ctx = canvasCollage.getContext('2d');
@@ -122,6 +92,53 @@ export async function createCollage(sources, maxWidth, { layout = 'row', columns
       ctx.drawImage(img, x, y, width, height);
     });
   });
+
+  return canvasCollage;
+}
+
+function createColumnCollage({ photos, maxWidth, columns }) {
+  let totalColumns = columns;
+  if (totalColumns === undefined) {
+    totalColumns = 1;
+    if (maxWidth >= 500) totalColumns = 2;
+    if (maxWidth >= 900) totalColumns = 3;
+    if (maxWidth >= 1500) totalColumns = 4;
+  }
+
+  const items = getColumnLayout(photos, maxWidth, columns);
+  const canvasHeight = items[items.length - 1].containerHeight;
+  const canvasWidth = items[0].width * columns;
+
+  const canvasCollage = Canvas.createCanvas(canvasWidth, canvasHeight, 'png');
+  const ctx = canvasCollage.getContext('2d');
+
+  items.forEach(({
+    height, width, photo, top, left,
+  }) => {
+    const img = new Canvas.Image();
+    img.src = photo;
+    ctx.drawImage(img, left, top, width, height);
+  });
+
+  return canvasCollage;
+}
+
+// eslint-disable-next-line import/prefer-default-export
+export async function createCollage(sources, maxWidth, { layout = 'row', columns } = {}) {
+  const photos = await Promise.all(sources.map(getPhoto));
+  const sizes = await Promise.all(photos.map(sizeOf));
+  const photosWithSizes = photos.map((photo, index) => ({
+    photo,
+    ...sizes[index],
+  }));
+
+  let canvasCollage;
+
+  if (layout === 'row') {
+    canvasCollage = createRowCollage({ photos: photosWithSizes, maxWidth });
+  } else if (layout === 'column') {
+    canvasCollage = createColumnCollage({ photos: photosWithSizes, maxWidth, columns });
+  }
 
   return canvasCollage.toBuffer();
 }
