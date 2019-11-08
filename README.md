@@ -12,12 +12,12 @@ Turns an array of images into a photo collage
 ## Installation
 
     npm install --save @mtblc/image-collage
-    
+
 or
 
     yarn add @mtblc/image-collage
 
-## Usage
+## Quick Example
 
 ```javascript
 const { createCollage } = require('@mtblc/image-collage');
@@ -44,6 +44,22 @@ createCollage(photos, collageWidth).then((imageBuffer) => {
   fs.writeFileSync("out.png", imageBuffer);
 });
 ```
+
+## Documentation
+
+* [createCollage()](#createcollage)
+
+### createCollage()
+
+> ```ts
+> createCollage(sources: Array<string | Buffer>, maxWidth: number, mimeType?: string) => Buffer
+> ```
+
+Creates a [`Buffer`](https://nodejs.org/api/buffer.html) object representing the collage image.
+
+- **sources**: source of the images you want to merge in a single collage. Each element can be a `Buffer` image or a `string` (relative path to an image _or_ a image URL).
+- **maxWidth**: the max width of the resulting collage.
+- **mimeType**: optional, a string indicating the image format. Default value is `image/png`, but other posible values are `image/jpeg`, `raw`, `application/pdf` and `image/svg+xml`. See [Canvas#tobuffer](https://github.com/Automattic/node-canvas/blob/master/Readme.md#canvastobuffer) for more information.
 
 ## Acknowledge
 

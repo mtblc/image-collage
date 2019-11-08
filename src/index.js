@@ -64,7 +64,7 @@ function getPositions(rows) {
 }
 
 // eslint-disable-next-line import/prefer-default-export
-export async function createCollage(sources, maxWidth) {
+export async function createCollage(sources, maxWidth, mimeType = 'image/png') {
   const photos = await Promise.all(sources.map(getPhoto));
   const sizes = await Promise.all(photos.map(sizeOf));
   const photosWithSizes = photos.map((photo, index) => ({
@@ -76,7 +76,7 @@ export async function createCollage(sources, maxWidth) {
   const canvasWidth = getCanvasWidth(rows);
   const positions = getPositions(rows);
 
-  const canvasCollage = Canvas.createCanvas(canvasWidth, canvasHeight, 'png');
+  const canvasCollage = Canvas.createCanvas(canvasWidth, canvasHeight);
   const ctx = canvasCollage.getContext('2d');
 
   rows.forEach((row, i) => {
@@ -88,5 +88,5 @@ export async function createCollage(sources, maxWidth) {
     });
   });
 
-  return canvasCollage.toBuffer();
+  return canvasCollage.toBuffer(mimeType);
 }
