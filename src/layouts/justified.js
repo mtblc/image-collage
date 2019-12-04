@@ -71,6 +71,7 @@ export const computeRowLayout = ({
     for (let j = path[i - 1]; j < path[i]; ++j) {
       photos[j].width = round(height * ratio(photos[j]), 1);
       photos[j].height = height;
+      photos[j].margin = margin;
     }
   }
   return photos;
